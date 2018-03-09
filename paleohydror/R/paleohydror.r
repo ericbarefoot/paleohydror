@@ -1,8 +1,8 @@
-#' barefoot: A package for holding useful functions for Eric
+#' paleohydror: A package for implementing published routines in paleohydrologic reconstruction.
 #'
-#' I use this package to hold some functions that are useful to me.
+#' This package offers several functions and routines for deriving estimates of paleohydrology from field observations of rock outcrops. Data such as grain size are important too. 
 #' 
-#' @section barefoot functions:
+#' @section paleohydror functions:
 #' 
 #' The functions here make up a mix of tools to calculate and estimate modern suficial processes and back-calculate those processes in ancient rivers. 
 #' 
@@ -29,5 +29,5 @@
 #' 
 #' 
 #' @docType package
-#' @name barefoot
+#' @name paleohydror
 NULL
