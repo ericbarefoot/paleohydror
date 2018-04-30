@@ -2,9 +2,11 @@ Package: paleohydror
 Title: A package for implementing published routines in paleohydrologic reconstruction.
 Version: 0.0.0.9000
 Authors@R: person("Eric", "Barefoot", email = "eabarefoot@gmail.com", role = c("aut", "cre"))
-Description: This package offers several functions and routines for deriving estimates of paleohydrology from field observations of rock outcrops. Data such as grain size are important too. 
+Description: This package offers several functions and routines for deriving estimates of paleohydrology from field observations of rock outcrops. Data such as grain size are important too.
 Depends: R (>= 3.4.1)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1.9000
+Imports:
+  dplyr
