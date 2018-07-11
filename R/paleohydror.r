@@ -34,6 +34,12 @@
 #'
 #' \code{height_length} Estimating bedform height if bedform length is known.
 #'
+#' \code{trampush_slp} estimates paleoslope using an empirical relationship with median bedload grain size and bankfull flow depth from Trampush (2014).
+#'
+#'
+#'
+#'
+#'
 #' @docType package
 #' @name paleohydror
 NULL
