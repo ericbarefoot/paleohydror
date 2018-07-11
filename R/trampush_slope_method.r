@@ -22,11 +22,11 @@
 
 trampush_slp = function(Dbed, H, perc = 50) {
 
-  a0sp = smooth.spline(x = c(-2.14, -2.10, -2.08, -2.05, -2.01), y = c(2.5,25,50,75,97.5))
-  a1sp = smooth.spline(x = c(0.222, 0.244, 0.254, 0.266, 0.287), y = c(2.5,25,50,75,97.5))
-  a1sp = smooth.spline(x = c(-1.18, -1.12, -1.09, -1.06, -1.00), y = c(2.5,25,50,75,97.5))
+  a0sp = smooth.spline(y = c(-2.14, -2.10, -2.08, -2.05, -2.01), x = c(2.5,25,50,75,97.5))
+  a1sp = smooth.spline(y = c(0.222, 0.244, 0.254, 0.266, 0.287), x = c(2.5,25,50,75,97.5))
+  a2sp = smooth.spline(y = c(-1.18, -1.12, -1.09, -1.06, -1.00), x = c(2.5,25,50,75,97.5))
 
-  logS = predict(a0sp, perc) + predict(a1sp, perc) * log(Dbed) + predict(a2sp, perc) * log(H)
+  logS = predict(a0sp, x = perc)$y + predict(a1sp, perc)$y * log10(Dbed) + predict(a2sp, perc)$y * log10(H)
 
   return(S = 10^logS)
 

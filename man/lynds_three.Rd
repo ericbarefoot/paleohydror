@@ -4,7 +4,8 @@
 \alias{lynds_three}
 \title{Slackwater/suspension method to calculate paleoslope from preserved sediments}
 \usage{
-lynds_three(Dbed, Dsusp, H, rhos = 2650, rhof = 1000, ws_mode = "simple")
+lynds_three(Dbed, Dsusp, H, rhos = 2650, rhof = 1000,
+  ws_mode = "simple")
 }
 \arguments{
 \item{Dbed}{The median grain size of bedload sediments in meters.}
