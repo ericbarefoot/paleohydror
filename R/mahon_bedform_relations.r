@@ -186,13 +186,14 @@ ancient_1 = function(Tsm, D50, Hbf, uncert = NULL) {
     env = c(-zscore, zscore)
 
     V_env = c(
-      bedform_velocity(fun_paramVal(pars, 'beta0', zscore = env[1]), fun_paramVal(pars, 'beta1', zscore = env[1]), S_est),
-      bedform_velocity(fun_paramVal(pars, 'beta0', zscore = env[2]), fun_paramVal(pars, 'beta1', zscore = env[2]), S_est)
+      bedform_velocity(beta0 = fun_paramVal(pars, 'beta0', zscore = env[1])$val, beta1 = fun_paramVal(pars, 'beta1', zscore = env[1])$val, S = S_est),
+      bedform_velocity(beta0 = fun_paramVal(pars, 'beta0', zscore = env[2])$val, beta1 = fun_paramVal(pars, 'beta1', zscore = env[2])$val, S = S_est)
+      # bedform_velocity(fun_paramVal(pars, 'beta0', zscore = env[2]), fun_paramVal(pars, 'beta1', zscore = env[2]), S_est)
     )
 
     qs_env = c(
-      bedform_bedload(hd, V_env[1]),
-      bedform_bedload(hd, V_env[2])
+      bedform_bedload(hd_est, V_env[1]),
+      bedform_bedload(hd_est, V_env[2])
     )
 
     return(list(S = S_est, V = V_est, qs = qs_est, V_env = V_env, qs_env = qs_env))
