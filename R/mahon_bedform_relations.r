@@ -154,7 +154,7 @@ dune_height = function(gamma, Tsm) {
 #' @param Tsm The mean thickness of cross-bedded cosets. (see publication for more information)
 #' @param D50 The median bedload grain size. Determined from samples.
 #' @param Hbf The mean bankfull flow depth. Determined from preserved barforms.
-#' @param uncert The uncertainty window for empirical parameters. The user should put in a confidence interval. A lower confidence interval will have a narrower error envelope, but will require more tenuous conclusion.
+#' @param uncert The uncertainty window for empirical parameters. The user should put in a confidence interval as a decimal. A lower confidence interval will have a narrower error envelope, but will require more tenuous conclusion.
 #' @return Returns a list with elements:
 #' \code{S}, the river slope (dimensionless).
 #' \code{hd}, the dune height in the ancient river (m).
@@ -186,8 +186,8 @@ ancient_1 = function(Tsm, D50, Hbf, uncert = NULL) {
     env = c(-zscore, zscore)
 
     V_env = c(
-      bedform_velocity(fun_paramVal(pars, 'beta0', zscore = env[1]), fun_paramVal(pars, 'beta1', zscore = env[1]), S),
-      bedform_velocity(fun_paramVal(pars, 'beta0', zscore = env[2]), fun_paramVal(pars, 'beta1', zscore = env[2]), S)
+      bedform_velocity(fun_paramVal(pars, 'beta0', zscore = env[1]), fun_paramVal(pars, 'beta1', zscore = env[1]), S_est),
+      bedform_velocity(fun_paramVal(pars, 'beta0', zscore = env[2]), fun_paramVal(pars, 'beta1', zscore = env[2]), S_est)
     )
 
     qs_env = c(
@@ -195,7 +195,7 @@ ancient_1 = function(Tsm, D50, Hbf, uncert = NULL) {
       bedform_bedload(hd, V_env[2])
     )
 
-    return(list(V = V_est, qs = qs_est, V_env = V_env, qs_env = qs_env))
+    return(list(S = S_est, V = V_est, qs = qs_est, V_env = V_env, qs_env = qs_env))
 
   }
 
