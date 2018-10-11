@@ -7,7 +7,7 @@
 settle(ws_mode, D, constants)
 }
 \arguments{
-\item{ws_mode}{Denotes whether to use a 'simple' equation, neglecting the shape and roundness of particles, or to use the more 'complex' formulation}
+\item{ws_mode}{Denotes whether to use a 'simpleDietrich' equation, neglecting the shape and roundness of particles, or to use the more 'complexDietrich' formulation. Also allows 'fergusonchurch' for the ferguson and church relation, which is much simpler.}
 
 \item{D}{The grain size you wish to calculate settling velocity for.}
 
@@ -17,9 +17,10 @@ settle(ws_mode, D, constants)
 Returns a list with two values \code{$ws} and \code{$wstar} which are the settling velocity and dimensionless settling velocity, respectively.
 }
 \description{
-\code{settle} calculates the settling velocity for a particle, given some parameters.
+\code{settle} calculates the settling velocity for a particle, given some parameters. Offers a choice between a relation published by Dietrich (1982) or Ferguson and Church (2004)
 }
 \examples{
-settle('simple', 120e-6)
-settle('complex', 120e-6, list(g = 9.8, rhos = 2650, rhof = 1000, nuu  = 1.004e-6, csf = 0.7, PI = 3.5)
+settle('simpleDietrich', 120e-6)
+settle('complexDietrich', 120e-6, list(g = 9.8, rhos = 2650, rhof = 1000, nuu  = 1.004e-6, csf = 0.7, PI = 3.5)
+settle('fergusonchurch', 120e-6)
 }

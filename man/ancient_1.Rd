@@ -13,7 +13,7 @@ ancient_1(Tsm, D50, Hbf, uncert = NULL)
 
 \item{Hbf}{The mean bankfull flow depth. Determined from preserved barforms.}
 
-\item{uncert}{The uncertainty window for empirical parameters. The user should put in a confidence interval. A lower confidence interval will have a narrower error envelope, but will require more tenuous conclusion.}
+\item{uncert}{The uncertainty window for empirical parameters. The user should put in a confidence interval as a decimal. A lower confidence interval will have a narrower error envelope, but will require more tenuous conclusion.}
 }
 \value{
 Returns a list with elements:
