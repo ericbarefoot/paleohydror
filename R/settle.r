@@ -1,18 +1,19 @@
 #' Calculate settling velocity for a particle.
 #'
-#' \code{settle} calculates the settling velocity for a particle, given some parameters.
-#' @param ws_mode Denotes whether to use a 'simple' equation, neglecting the shape and roundness of particles, or to use the more 'complex' formulation
+#' \code{settle} calculates the settling velocity for a particle, given some parameters. Offers a choice between a relation published by Dietrich (1982) or Ferguson and Church (2004)
+#' @param ws_mode Denotes whether to use a 'simpleDietrich' equation, neglecting the shape and roundness of particles, or to use the more 'complexDietrich' formulation. Also allows 'fergusonchurch' for the ferguson and church relation, which is much simpler.
 #' @param D The grain size you wish to calculate settling velocity for.
 #' @param constants A list of constants for calculation, need in order (g) gravitational constant, (rhos) sediment density, (rhof) fluid density, (nuu) kinematic viscosity, (csf) corey shape factor, and (PI) Powers roundness index. For the simple formulation, neglect the last two. Defaults to constants = list(g = 9.8, rhos = 2650, rhof = 1000, nuu  = 1.004e-6, csf = 0.7, PI = 3.5)
 #' @return Returns a list with two values \code{$ws} and \code{$wstar} which are the settling velocity and dimensionless settling velocity, respectively.
 #' @export
 #' @examples
-#' settle('simple', 120e-6)
-#' settle('complex', 120e-6, list(g = 9.8, rhos = 2650, rhof = 1000, nuu  = 1.004e-6, csf = 0.7, PI = 3.5)
+#' settle('simpleDietrich', 120e-6)
+#' settle('complexDietrich', 120e-6, list(g = 9.8, rhos = 2650, rhof = 1000, nuu  = 1.004e-6, csf = 0.7, PI = 3.5)
+#' settle('fergusonchurch', 120e-6)
 
-#	function to replicate two implementations of Dietrich 1982 settling velocity measurement for a given grain size and density.
+#	function to replicate two implementations of settling velocity calculations for a given grain size and density.
 #	Eric Barefoot
-#	Nov 2017
+#	Oct 2018
 
 #	takes constants as a list with names g, rhos, rhof, nuu, csf, PI with an option to leave off csf and PI for a simpler case
 
@@ -21,34 +22,23 @@
 settle = function(ws_mode, D, constants) {
 
 	if(missing(constants)) {
-		g = 9.8			# m/s^2
-		rhos = 2650		# assuming ~quartz sand.
-		rhof = 1000		# assuming water
-		nuu  = 1.004e-6	# kinematic viscocity of water at 20C in Pa s
-		csf = 0.7		# given csf for grains
-		PI = 3.5		# average for natural grains. Varies from 0-6.
+		constants = list()
+		constants$g = 9.81			# m/s^2
+		constants$rhos = 2650		# assuming ~quartz sand.
+		constants$rhof = 1000		# assuming water
+		constants$nuu = 1.004e-6	# kinematic viscocity of water at 20C in Pa s
+		constants$csf = 0.7		# given csf for grains
+		constants$PI = 3.5		# average for natural grains. Varies from 0-6.
 	}
-	else if (ws_mode == 'simple' & length(constants) != 4) {
-		warning('incorrect number of constants; using defaults for the simple method')
-		g = 9.8			# *m/s^2
-		rhos = 2650		# *assuming ~quartz sand.
-		rhof = 1000		# *assuming water
-		nuu  = 1.004e-6}# *kinematic viscocity of water at 20C in Pa s}
-	else if (ws_mode == 'complex' & length(constants) != 6) {
-		warning('incorrect number of constants; using defaults for the complex method')
-		g = 9.8			# m/s^2
-		rhos = 2650		# assuming ~quartz sand.
-		rhof = 1000		# assuming water
-		nuu  = 1.004e-6	# kinematic viscocity of water at 20C in Pa s
-		csf = 0.7		# given csf for grains
-		PI = 3.5}		# average for natural grains. Varies from 0-6.
-	else if (ws_mode == 'simple') {
+
+	if (ws_mode == 'simpleDietrich') {
 		g = constants$g			# m/s^2
 		rhos = constants$rhos	# assuming ~quartz sand.
 		rhof = constants$rhof	# assuming water
 		nuu  = constants$nuu	# kinematic viscocity of water at 20C in Pa s
 	}
-	else if (ws_mode == 'complex') {
+
+	if (ws_mode == 'complexDietrich') {
 		g = constants$g			# m/s^2
 		rhos = constants$rhos	# assuming ~quartz sand.
 		rhof = constants$rhof	# assuming water
@@ -57,13 +47,22 @@ settle = function(ws_mode, D, constants) {
 		PI = constants$PI		# average for natural grains. Varies from 0-6.
 	}
 
+	if (ws_mode == 'fergusonchurch') {
+		g = constants$g			# m/s^2
+		rhos = constants$rhos	# assuming ~quartz sand.
+		rhof = constants$rhof	# assuming water
+		muu  = 1.002e-3	# kinematic viscocity of water at 20C in Pa s
+		C1 = 18		# given csf for grains
+		C2 = 1		# average for natural grains. Varies from 0-6.
+	}
+
 	#	calculate dimensionless grain size
 
 	Dstar = (rhos - rhof) * ((g * D^3) / (rhof * nuu^2))
 
 	#	simple case
 
-	if (ws_mode == 'simple') {
+	if (ws_mode == 'simpleDietrich') {
 
 		Dsl = log10(Dstar)
 
@@ -71,10 +70,14 @@ settle = function(ws_mode, D, constants) {
 
 		wstar = 10^(R1)
 
+		#	conversion back to dimensional settling velocity
+
+		ws = (wstar * (rhos - rhof) * g * nuu / rhof)^(1/3)
+
 	}
 
-	if (ws_mode == 'complex') {
-	#	some simplifying common terms
+	if (ws_mode == 'complexDietrich') {
+		#	some simplifying common terms
 
 		Dsl = log10(Dstar)
 		tantan = tanh(Dsl - 4.6)
@@ -90,11 +93,25 @@ settle = function(ws_mode, D, constants) {
 		R3 = (0.65 - ((csf/2.83)*tantan))^(1+(3.5-PI)/2.5)
 
 		wstar = R3 * 10^(R1 + R2)
+
+		#	conversion back to dimensional settling velocity
+
+		ws = (wstar * (rhos - rhof) * g * nuu / rhof)^(1/3)
+
 	}
 
-	#	conversion back to dimensional settling velocity
+	#	Ferguson-Church case.
 
-	ws = (wstar * (rhos - rhof) * g * nuu / rhof)^(1/3)
+	if (ws_mode == 'fergusonchurch') {
+
+		R = (rhos - rhof) / rhof
+
+		ws = (R * g * D^2) / (C1 * (muu / rhof)) + sqrt(0.75 * C2 * R * g * D^3)
+
+		wstar = NA
+
+	}
+
 
 	return(list(ws = ws, wstar = wstar))
 
