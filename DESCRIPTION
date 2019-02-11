@@ -3,7 +3,7 @@ Title: A package for implementing published routines in paleohydrologic reconstr
 Version: 0.0.0.9000
 Authors@R: person("Eric", "Barefoot", email = "eabarefoot@gmail.com", role = c("aut", "cre"))
 Description: This package offers several functions and routines for deriving estimates of paleohydrology from field observations of rock outcrops. Data such as grain size are important too.
-Depends: R (>= 3.4.1)
+Depends: R (>= 3.4.1), stats4
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
